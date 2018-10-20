@@ -1,5 +1,5 @@
 #---Importa la clase "Nodo" que se usará para guardar los elementos en una lista
-from Node import Nodo
+from .Node import Nodo
 #---Declara la clase Lista (List), object es la clase de la cual hereda List
 class List(object):
     #---Crea una lista vacía
@@ -30,12 +30,11 @@ class List(object):
         return self.get_length() == 0
     #---Revisa si un elemento está en la lista, @e es el elemento que quieres checar si está, regresa @True si sí está, @False en caso contrario
     def contains(self,e):
-        i = self.head # @i es la variable temporal, empezaremos a recorrer la lista por la cabeza 
-        while i.get_next() != None: # Termina el ciclo @while si @i es la cola
+        i = self.head # @i es la variable temporal, empezaremos a recorrer la lista por la cabeza
+        while i != None: # Termina el ciclo @while si @i es la cola
             if i.get_elem() == e:
                 return True
-            else:
-                i = i.get_next()
+            i = i.get_next()
         return False
     #---Método para agregar elementos a la lista, @e es el elemento que se va a instalar
     def add(self,e):
@@ -53,18 +52,18 @@ class List(object):
         self.longitud += 1 # Incrementa la longitud
     #---Método que elimina un elemento de la lista
     def remove(self,e):
-        if not self.contains(e): # Checa que el elemento está en la lista, si no está, lanza un erro @ValueError 
-            raise ValueError("Not in the list")
+        temp = self.get_node(e) # El nodo de la lista que contiene a @e
+        if temp.get_elem() == self.head.get_elem(): # Checa si el elemento que pedimos borrar es el primer elemento
+            self.head = temp.get_next() # Actualiza la cabeza a su siguiente
+            temp = None # Borra el Nodo
         else:
-            temp = self.get_node(e) # El nodo de la lista que contiene a @e
-            if temp.get_elem() == self.head.get_elem(): # Checa si el elemento que pedimos borrar es el primer elemento
-                self.head = temp.get_next() # Actualiza la cabeza a su siguiente
-                temp = None # Borra el Nodo
+            if not self.contains(e): # Checa que el elemento está en la lista, si no está, lanza un erro @ValueError 
+                raise ValueError("Not in the list")
             else:
                 temp.get_prev().set_next(temp.get_next()) # Conecta el Nodo anterior a @temp con su siguiente
                 temp.get_next().set_prev(temp.get_prev()) # Conecta el Nodo siguiente a @temp a su anterior
                 temp = None # Borra @temp
-            self.longitud = self.longitud - 1 # Disminuye la longitud
+        self.longitud = self.longitud - 1 # Disminuye la longitud
     #---Método para buscar un elemento en la lista
     def get_node(self,e):
         temp = self.head # El primer Nodo en el que empezaremos a buscar
